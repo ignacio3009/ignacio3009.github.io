@@ -1,1 +1,2 @@
-##Gauss-Seidel Algorithm
+## Gauss-Seidel Algorithm
+
