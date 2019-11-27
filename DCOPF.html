@@ -30,10 +30,10 @@
   <p>Where, $\theta$ and $P_i$ are the optimization variables.</p>
   <p>The $B$ matrix, is the admittance matrix of the system (with no resistance), and it is calculated as follows:
     <ul>
-      <li>$Y_{ii}$ = $\sum\limits_{j=1}^N y_{ij}$</li>
+      <li>$Y_{ii}$ = $ y_i + \sum\limits_{j=1}^N y_{ij}$</li>
       <li>$Y_{ij} = -y_{ij}$</li>
     </ul>
-    Where $i\neq j$.
+    Where $i\neq j$. The element $y_i$ is the admittance of linear loads connected to bus $i$ as well as the admittance-to-ground at bus $i$.
   </p>
 </div>
 
