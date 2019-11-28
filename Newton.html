@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Newton Method Examples</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+     <script> MathJax = {tex: {inlineMath: [['$', '$']] },svg: {fontCache: 'global'}, options: { renderActions: { addMenu: [0] }}};</script>
+     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.0/es5/tex-mml-chtml.js"></script>
+  </head>
+
+<div class="container">
+  <h1><p>Standard Newton Method </p></h1>
+    <hr>
+<p>This is based on <a href="http://overbye.engr.tamu.edu/wp-content/uploads/sites/146/2018/11/ECEN615_Fall2018_Lect26.pdf">Lecture 26: Optimal Power Flow, Security
+  Constrained OPF, Optimization, Prof. tom Overbye</a></p>
+
+  The problem is:
+  $$\begin{align}
+   & & \text{minimize} \ f(x)    \\ \\
+   s.t & & g(x) = 0 \\ \\
+   & & h_1(x) = 0 \\ \\
+   & & h_2(x) \leq 0
+  \end{align}$$
+</div>
+
+<div class="container">
+<h3>Lagrangian definition</h3>
+<hr>
+There are some inequality constraints that are binding and are equal to zero ($h_1(x)=0$), and some nonbinding that are not ($h_2(x) < 0$).
+To solve this, define the Lagrangian:
+
+$$L(x,\mu,\lambda) = f(x) + \mu^T g(x) + \lambda^Th_1(x)$$
+
+Let
+$$z = [ x \,\  \mu \,\ \lambda]$$
+Where $\mu$ and $\lambda$ are the Lagrande Multipliers.
+<p></p>
+
+
+<h3>Gradient</h3>
+<hr>
+A condition for finding the minimum value in $z^*$ is that in this point:
+$$
+\begin{align}
+   \nabla L(z^*)  = 0  & = \begin{bmatrix}
+          \frac{\partial L(z)}{\partial z_1} \rvert_{z=z^*} \\
+          \frac{\partial L(z)}{\partial z_2}\rvert_{z=z^*} \\
+          \vdots \\
+        \end{bmatrix}
+ \end{align}
+$$
+
+<h3>Hessian Matrix</h3>
+Also the second derivative is needed:
+$$
+\begin{align}
+   \nabla^2 H(z)  = \Big[ \frac{\partial^2 L(z)}{\partial z_i \partial z}\Big] & = \begin{bmatrix}
+          \frac{\partial^2 L(z)}{\partial x_i\partial x_j} & \frac{\partial^2 L(z)}{\partial x_i\partial \mu _j} & \frac{\partial^2 L(z)}{\partial x_i\partial \lambda _j}\\
+          \frac{\partial L(z)}{\partial \mu_i \partial x_j} & 0 & 0\\
+          \frac{\partial L(z)}{\partial \lambda_i \partial x_j} & 0 & 0\\
+        \end{bmatrix}
+ \end{align}
+$$
+
+Note that the derivatives between the lagrangian multipliers and theirselves are zero.
+</div>
+
+<div class="container">
+  <p><h3>Algorithm</h3></p>
+  <hr>
+  <p>And this is the fun part!</p>
+  <p>You need to follow the next steps:
+    <ol>
+      <li>Define an starting point $z_0 = [x_0 \ \mu_0 \ \lambda_0]$</li>
+      <li>Define the maximum number of iterations $k_{max}$ and the convergence tolerance $\epsilon$ </li>
+      <li>Calculate $H(z_0)$ and $\nabla L(z_0)$</li>
+      <li>Define $z_1 = z_0 - [H(z_0)]^{-1}\cdot \nabla L(z_0)$</li>
+      <li>Get the magnitude of the gradient $ ||\nabla L(z_0)||$</li>
+      <li>Compare this magnitude with the maximum error $||\nabla L(z_0)|| \geq \epsilon$ </li>
+      <li>If this magnitude is greater than the error permitted, define $z_1 = z_0$ and repeat from 3 </li>
+      <li>Stop when the magnitude of the gradient converges to a number lesser than $\epsilon$ or when the maximum number of interations is reached.</li>
+    </ol>
+    <!-- Where $i\neq j$. The element $y_i$ is the admittance of linear loads connected to bus $i$ as well as the admittance-to-ground at bus $i$. -->
+  </p>
+  <p>Here there is a seudo algorithm:</p>
+  <ul>
+    <li>$z_0 = [x_0 \ \mu_0 \ \lambda_0]$</li>
+    <li>Define $k_{max}$ and $\epsilon$ </li>
+    <li>Set $k = 0$</li>
+    <li>Get $z_1 = z_0 - [H(z_0)]^{-1}\cdot \nabla L(z_0)$</li>
+    <li>Get $ Lm = ||\nabla L(z_0)||$ </li>
+    <li>while($k< kmax $ and $ Lm > \epsilon$)</li>
+    <ul>
+      <li>$z_0 = z_1$</li>
+      <li>$z_1 = z_0 - [H(z_0)]^{-1}\cdot \nabla L(z_0)$</li>
+      <li>$Lm = ||\nabla L(z_0)|| $</li>
+      <li>$k = k+1$</li>
+    </ul>
+    <li>end while</li>
+    <li>Print Results!</li>
+  </ul>
+
+  <h3>Examples</h3>
+  <hr>
+  <p>Here you can find some examples implemented on python!</p>
+  <p><a href="https://github.com/ignacio3009/Newton-Method-Examples">Examples</a></p>
+  <p></p>
+  <p></p>
+  <p></p>
+
+</div>
+
+
+  <body>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
